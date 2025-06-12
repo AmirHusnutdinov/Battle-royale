@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiger Battle Royale</title>
+    <!-- templates/index.html -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap">
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/' + image_name) }}" alt="Logo" class="mascot-img">
+            <h1>TIGER BATTLE ROYALE</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="tournament-section">
+            <h2>TOURNAMENT BRACKET</h2>
+            <div class="tournament-grid" id="tournamentGrid">
+                <!-- Tournament brackets will be generated here -->
+            </div>
+        </div>
+
+        <div class="registration-section" id="registrationSection">
+            <div class="registration-form">
+                <h2>JOIN THE BATTLE</h2>
+                <div class="form-group">
+                    <label for="playerName">YOUR NAME</label>
+                    <input type="text" id="playerName" placeholder="Enter your name">
+                </div>
+                <div class="form-group">
+                    <label for="amount">AMOUNT ($)</label>
+                    <input type="number" id="amount" min="1" placeholder="Enter your bet amount">
+                </div>
+                <button id="joinButton" class="glow-button">JOIN BATTLE</button>
+
+                <div class="participants-list">
+                    <h3>CURRENT PARTICIPANTS</h3>
+                    <ul id="participantsList"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="wheel-section hidden" id="wheelSection">
+            <h2>BATTLE WHEEL</h2>
+            <div class="timer-display">
+                <p>Next spin in: <span id="timerDisplay">30</span> seconds</p>
+            </div>
+            <div class="wheel-container">
+                <canvas id="wheelCanvas" width="400" height="400"></canvas>
+                <div class="wheel-pointer"></div>
+            </div>
+            <div class="battle-info">
+                <div class="battle-players">
+                    <div class="player" id="player1">
+                        <h3>PLAYER 1</h3>
+                        <p class="player-name">-</p>
+                        <p class="player-amount">$0</p>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="player" id="player2">
+                        <h3>PLAYER 2</h3>
+                        <p class="player-name">-</p>
+                        <p class="player-amount">$0</p>
+                    </div>
+                </div>
+                <button id="spinButton" class="glow-button">SPIN THE WHEEL</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" id="winnerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>BATTLE RESULT</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="winner-announcement">
+                    <img src="tiger-mascot.png" alt="Tiger Mascot" class="winner-mascot">
+                    <h3><span id="winnerName">Player</span> WINS!</h3>
+                    <p>Prize: $<span id="winnerPrize">0</span></p>
+                </div>
+                <button id="nextBattleButton" class="glow-button">NEXT BATTLE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
