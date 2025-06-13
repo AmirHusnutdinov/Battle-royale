@@ -1,96 +1,474 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiger Battle Royale</title>
-    <!-- templates/index.html -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap">
+    <title>Турнирная сетка</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            height: 100vh;
+            display: flex;
+        }
+
+        .tournament-container {
+            width: 70%;
+            padding: 20px;
+            background-color: white;
+            overflow-y: auto;
+            border-right: 2px solid #ddd;
+        }
+
+        .control-panel {
+            width: 30%;
+            padding: 20px;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tournament-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 100%;
+        }
+
+        .tournament-level {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .level-title {
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .match-pair {
+            display: flex;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        .participant {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .participant:first-child {
+            border-right: 1px solid #ddd;
+        }
+
+        .participant.winner {
+            background-color: #d4edda;
+            border-color: #28a745;
+        }
+
+        .participant.loser {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            opacity: 0.7;
+        }
+
+        .participant-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .participant-sum {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .participant-chance {
+            font-size: 12px;
+            color: #007bff;
+            margin-top: 5px;
+        }
+
+        .placeholder {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .tournament-info {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tournament-info h3 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .no-participants {
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+            padding: 50px;
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <div class="logo">
-            <img src="{{ url_for('static', filename='img/' + image_name) }}" alt="Logo" class="mascot-img">
-            <h1>TIGER BATTLE ROYALE</h1>
-        </div>
-    </header>
-
-    <main>
-        <div class="tournament-section">
-            <h2>TOURNAMENT BRACKET</h2>
-            <div class="tournament-grid" id="tournamentGrid">
-                <!-- Tournament brackets will be generated here -->
-            </div>
-        </div>
-
-        <div class="registration-section" id="registrationSection">
-            <div class="registration-form">
-                <h2>JOIN THE BATTLE</h2>
-                <div class="form-group">
-                    <label for="playerName">YOUR NAME</label>
-                    <input type="text" id="playerName" placeholder="Enter your name">
-                </div>
-                <div class="form-group">
-                    <label for="amount">AMOUNT ($)</label>
-                    <input type="number" id="amount" min="1" placeholder="Enter your bet amount">
-                </div>
-                <button id="joinButton" class="glow-button">JOIN BATTLE</button>
-
-                <div class="participants-list">
-                    <h3>CURRENT PARTICIPANTS</h3>
-                    <ul id="participantsList"></ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="wheel-section hidden" id="wheelSection">
-            <h2>BATTLE WHEEL</h2>
-            <div class="timer-display">
-                <p>Next spin in: <span id="timerDisplay">30</span> seconds</p>
-            </div>
-            <div class="wheel-container">
-                <canvas id="wheelCanvas" width="400" height="400"></canvas>
-                <div class="wheel-pointer"></div>
-            </div>
-            <div class="battle-info">
-                <div class="battle-players">
-                    <div class="player" id="player1">
-                        <h3>PLAYER 1</h3>
-                        <p class="player-name">-</p>
-                        <p class="player-amount">$0</p>
-                    </div>
-                    <div class="vs">VS</div>
-                    <div class="player" id="player2">
-                        <h3>PLAYER 2</h3>
-                        <p class="player-name">-</p>
-                        <p class="player-amount">$0</p>
-                    </div>
-                </div>
-                <button id="spinButton" class="glow-button">SPIN THE WHEEL</button>
-            </div>
-        </div>
-    </main>
-
-    <div class="modal" id="winnerModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>BATTLE RESULT</h2>
-                <span class="close-modal">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="winner-announcement">
-                    <img src="tiger-mascot.png" alt="Tiger Mascot" class="winner-mascot">
-                    <h3><span id="winnerName">Player</span> WINS!</h3>
-                    <p>Prize: $<span id="winnerPrize">0</span></p>
-                </div>
-                <button id="nextBattleButton" class="glow-button">NEXT BATTLE</button>
-            </div>
+<div class="tournament-container">
+    <div id="tournament-grid" class="tournament-grid">
+        <div class="no-participants">
+            Добавьте участников для начала турнира
         </div>
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<div class="control-panel">
+    <div class="tournament-info">
+        <h3>Информация о турнире</h3>
+        <div>Участников: <span id="participant-count">0</span></div>
+        <div>Активных пар: <span id="active-pairs">0</span></div>
+    </div>
+
+    <form id="add-participant-form">
+        <div class="form-group">
+            <label for="participant-name">Имя участника:</label>
+            <input type="text" id="participant-name" required>
+        </div>
+        <div class="form-group">
+            <label for="participant-sum">Сумма:</label>
+            <input type="number" id="participant-sum" min="1" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить участника</button>
+    </form>
+
+    <button id="play-button" class="btn btn-success" disabled>Играть</button>
+
+    <div id="game-log"
+         style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 4px; border: 1px solid #ddd;">
+        <h4>Лог игр:</h4>
+        <div id="log-content"></div>
+    </div>
+</div>
+
+<script>
+    class Tournament {
+        constructor() {
+            this.participants = [];
+            this.pairs = [];
+            this.gameLog = [];
+        }
+
+        addParticipant(name, sum) {
+            this.participants.push({
+                id: Date.now() + Math.random(),
+                name: name,
+                sum: parseInt(sum),
+                active: true
+            });
+            this.rebuildTournament();
+            this.updateDisplay();
+        }
+
+        rebuildTournament() {
+            // Получаем активных участников и сортируем по сумме
+            const activeParticipants = this.participants.filter(p => p.active).sort((a, b) => a.sum - b.sum);
+            this.pairs = [];
+
+            if (activeParticipants.length < 2) {
+                return;
+            }
+
+            const used = new Set();
+            const pairs = [];
+
+            // Специальное правило: 2 минимальные суммы всегда играют друг против друга
+            if (activeParticipants.length >= 2) {
+                const min1 = activeParticipants[0];
+                const min2 = activeParticipants[1];
+
+                // Проверяем, не слишком ли большая разница (более 10%)
+                const diff = Math.abs(min1.sum - min2.sum) / Math.min(min1.sum, min2.sum);
+
+                pairs.push({
+                    participant1: min1,
+                    participant2: min2,
+                    level: 0
+                });
+                used.add(min1.id);
+                used.add(min2.id);
+            }
+
+            // Формируем остальные пары
+            for (let i = 0; i < activeParticipants.length; i++) {
+                const participant = activeParticipants[i];
+                if (used.has(participant.id)) continue;
+
+                let bestMatch = null;
+                let bestDiff = Infinity;
+
+                // Ищем лучшую пару в пределах 10%
+                for (let j = i + 1; j < activeParticipants.length; j++) {
+                    const candidate = activeParticipants[j];
+                    if (used.has(candidate.id)) continue;
+
+                    const diff = Math.abs(participant.sum - candidate.sum) / Math.min(participant.sum, candidate.sum);
+                    if (diff <= 0.1 && diff < bestDiff) {
+                        bestMatch = candidate;
+                        bestDiff = diff;
+                    }
+                }
+
+                if (bestMatch) {
+                    pairs.push({
+                        participant1: participant,
+                        participant2: bestMatch,
+                        level: Math.floor(pairs.length / 2) + 1
+                    });
+                    used.add(participant.id);
+                    used.add(bestMatch.id);
+                } else {
+                    // Создаем пару с placeholder
+                    const lowerLevelSum = this.calculateLowerLevelSum(participant.sum);
+                    pairs.push({
+                        participant1: participant,
+                        participant2: {
+                            id: 'placeholder_' + Date.now(),
+                            name: '???',
+                            sum: lowerLevelSum,
+                            placeholder: true
+                        },
+                        level: Math.floor(pairs.length / 2) + 1
+                    });
+                    used.add(participant.id);
+                }
+            }
+
+            this.pairs = pairs;
+        }
+
+        calculateLowerLevelSum(targetSum) {
+            // Примерная логика для расчета суммы placeholder
+            const activeSums = this.participants.filter(p => p.active).map(p => p.sum);
+            const avgSum = activeSums.reduce((a, b) => a + b, 0) / activeSums.length;
+            return Math.max(Math.floor(targetSum * 0.8), Math.floor(avgSum));
+        }
+
+        playGame() {
+            if (this.pairs.length === 0) return;
+
+            // Выбираем случайную пару для игры
+            const availablePairs = this.pairs.filter(pair =>
+                !pair.participant2.placeholder &&
+                pair.participant1.active &&
+                pair.participant2.active
+            );
+
+            if (availablePairs.length === 0) return;
+
+            const randomPair = availablePairs[Math.floor(Math.random() * availablePairs.length)];
+            const { participant1, participant2 } = randomPair;
+
+            // Рассчитываем шансы на победу
+            const totalSum = participant1.sum + participant2.sum;
+            const chance1 = participant1.sum / totalSum;
+
+            // Определяем победителя
+            const random = Math.random();
+            const winner = random < chance1 ? participant1 : participant2;
+            const loser = winner === participant1 ? participant2 : participant1;
+
+            // Обновляем суммы
+            winner.sum += loser.sum;
+            loser.active = false;
+
+            // Добавляем в лог
+            this.gameLog.unshift({
+                winner: winner.name,
+                loser: loser.name,
+                winnerSum: winner.sum,
+                chance: Math.round((winner === participant1 ? chance1 : (1 - chance1)) * 100)
+            });
+
+            // Перестраиваем турнир
+            this.rebuildTournament();
+            this.updateDisplay();
+            this.updateGameLog();
+        }
+
+        updateDisplay() {
+            const grid = document.getElementById('tournament-grid');
+            const participantCount = document.getElementById('participant-count');
+            const activePairs = document.getElementById('active-pairs');
+
+            participantCount.textContent = this.participants.filter(p => p.active).length;
+            activePairs.textContent = this.pairs.filter(p => !p.participant2.placeholder).length;
+
+            if (this.pairs.length === 0) {
+                grid.innerHTML = '<div class="no-participants">Добавьте участников для начала турнира</div>';
+                document.getElementById('play-button').disabled = true;
+                return;
+            }
+
+            // Группируем пары по уровням
+            const levels = {};
+            this.pairs.forEach(pair => {
+                if (!levels[pair.level]) levels[pair.level] = [];
+                levels[pair.level].push(pair);
+            });
+
+            let html = '';
+            Object.keys(levels).sort((a, b) => parseInt(b) - parseInt(a)).forEach(level => {
+                html += `<div class="tournament-level">`;
+                html += `<div class="level-title">Уровень ${level}</div>`;
+
+                levels[level].forEach(pair => {
+                    const totalSum = pair.participant1.sum + pair.participant2.sum;
+                    const chance1 = Math.round((pair.participant1.sum / totalSum) * 100);
+                    const chance2 = 100 - chance1;
+
+                    html += `<div class="match-pair">`;
+
+                    // Участник 1
+                    html += `<div class="participant ${!pair.participant1.active ? 'loser' : ''}">`;
+                    html += `<div class="participant-name">${pair.participant1.name}</div>`;
+                    html += `<div class="participant-sum">Сумма: ${pair.participant1.sum}</div>`;
+                    if (!pair.participant2.placeholder) {
+                        html += `<div class="participant-chance">Шанс: ${chance1}%</div>`;
+                    }
+                    html += `</div>`;
+
+                    // Участник 2
+                    html += `<div class="participant ${pair.participant2.placeholder ? 'placeholder' : (!pair.participant2.active ? 'loser' : '')}">`;
+                    html += `<div class="participant-name">${pair.participant2.name}</div>`;
+                    html += `<div class="participant-sum">Сумма: ${pair.participant2.sum}</div>`;
+                    if (!pair.participant2.placeholder) {
+                        html += `<div class="participant-chance">Шанс: ${chance2}%</div>`;
+                    }
+                    html += `</div>`;
+
+                    html += `</div>`;
+                });
+
+                html += `</div>`;
+            });
+
+            grid.innerHTML = html;
+
+            // Обновляем состояние кнопки "Играть"
+            const canPlay = this.pairs.some(pair =>
+                !pair.participant2.placeholder &&
+                pair.participant1.active &&
+                pair.participant2.active
+            );
+            document.getElementById('play-button').disabled = !canPlay;
+        }
+
+        updateGameLog() {
+            const logContent = document.getElementById('log-content');
+            const recentGames = this.gameLog.slice(0, 10);
+
+            logContent.innerHTML = recentGames.map(game =>
+                `<div style="margin-bottom: 5px; padding: 5px; background: #f8f9fa; border-radius: 3px;">
+                    <strong>${game.winner}</strong> победил <strong>${game.loser}</strong>
+                    (${game.chance}% шанс, сумма: ${game.winnerSum})
+                </div>`
+            ).join('');
+        }
+    }
+
+    // Инициализация
+    const tournament = new Tournament();
+
+    // Обработчики событий
+    document.getElementById('add-participant-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('participant-name').value.trim();
+        const sum = document.getElementById('participant-sum').value;
+
+        if (name && sum && parseInt(sum) > 0) {
+            tournament.addParticipant(name, sum);
+            document.getElementById('participant-name').value = '';
+            document.getElementById('participant-sum').value = '';
+        }
+    });
+
+    document.getElementById('play-button').addEventListener('click', function() {
+        tournament.playGame();
+    });
+
+    // Начальное отображение
+    tournament.updateDisplay();
+</script>
 </body>
 </html>
