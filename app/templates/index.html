@@ -12,133 +12,198 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
             height: 100vh;
             display: flex;
+            font-weight: 400;
         }
 
         .tournament-container {
             width: 70%;
-            padding: 20px;
+            padding: 30px;
             background-color: white;
-            overflow-y: auto;
-            border-right: 2px solid #ddd;
+            overflow: auto;
+            border-right: 1px solid #e9ecef;
         }
 
         .control-panel {
             width: 30%;
-            padding: 20px;
-            background-color: #f9f9f9;
+            padding: 30px;
+            background-color: #f8f9fa;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
         }
 
-        .tournament-grid {
+        .tournament-bracket {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            min-height: 700px;
+            padding: 20px 0;
+            gap: 60px;
+        }
+
+        .round {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            min-height: 100%;
+            position: relative;
+            min-width: 200px;
         }
 
-        .tournament-level {
+        .round-title {
+            text-align: center;
+            font-weight: 500;
+            font-size: 16px;
+            color: #495057;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .matches-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            justify-content: space-around;
+            min-height: 600px;
         }
 
-        .level-title {
-            font-weight: bold;
-            color: #333;
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 5px;
-            margin-bottom: 10px;
-        }
-
-        .match-pair {
+        .match {
             display: flex;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 10px;
+            flex-direction: column;
+            position: relative;
+            margin: 10px 0;
         }
 
         .participant {
-            flex: 1;
-            padding: 15px;
+            width: 180px;
+            height: 60px;
+            background-color: #6c757d;
+            color: white;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
             position: relative;
-        }
-
-        .participant:first-child {
-            border-right: 1px solid #ddd;
+            border-radius: 6px;
+            margin: 1px 0;
+            font-size: 14px;
+            font-weight: 400;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .participant.winner {
-            background-color: #d4edda;
-            border-color: #28a745;
+            background-color: #28a745;
         }
 
         .participant.loser {
-            background-color: #f8d7da;
-            border-color: #dc3545;
+            background-color: #adb5bd;
             opacity: 0.7;
         }
 
+        .participant.placeholder {
+            background-color: #e9ecef;
+            color: #6c757d;
+            font-style: italic;
+            box-shadow: none;
+        }
+
+        .participant.bye {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .participant-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
         .participant-name {
-            font-weight: bold;
+            font-weight: 500;
             font-size: 16px;
-            margin-bottom: 5px;
+            line-height: 1.2;
         }
 
         .participant-sum {
-            font-size: 14px;
-            color: #666;
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 2px;
+            font-weight: 400;
         }
 
         .participant-chance {
-            font-size: 12px;
-            color: #007bff;
-            margin-top: 5px;
-        }
-
-        .placeholder {
-            background-color: #f8f9fa;
-            color: #6c757d;
-            font-style: italic;
+            font-size: 14px;
+            font-weight: 500;
+            background-color: rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 12px;
+            min-width: 45px;
             text-align: center;
         }
 
+        .bye-indicator {
+            font-size: 12px;
+            font-weight: 500;
+            background-color: rgba(255,255,255,0.3);
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        /* Соединительные линии */
+        .connector-line {
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            width: 30px;
+            height: 2px;
+            background-color: #6c757d;
+            transform: translateY(-50%);
+        }
+
+        .connector-vertical {
+            position: absolute;
+            right: -30px;
+            width: 2px;
+            background-color: #6c757d;
+        }
+
+        /* Стили для панели управления */
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
 
         .form-group label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .form-group input {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            font-weight: 500;
+            color: #495057;
             font-size: 14px;
         }
 
+        .form-group input {
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
         .btn {
-            padding: 12px 20px;
+            padding: 12px 24px;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.2s;
         }
 
         .btn-primary {
@@ -148,6 +213,7 @@
 
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: translateY(-1px);
         }
 
         .btn-success {
@@ -157,22 +223,44 @@
 
         .btn-success:hover {
             background-color: #1e7e34;
+            transform: translateY(-1px);
         }
 
         .btn:disabled {
             background-color: #6c757d;
             cursor: not-allowed;
+            transform: none;
         }
 
         .tournament-info {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .tournament-info h3 {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            color: #6c757d;
+            font-weight: 400;
+        }
+
+        .info-value {
+            font-weight: 500;
             color: #495057;
         }
 
@@ -180,13 +268,103 @@
             text-align: center;
             color: #6c757d;
             font-style: italic;
-            padding: 50px;
+            padding: 100px 50px;
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        .game-log {
+            background-color: white;
+            border-radius: 12px;
+            border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .game-log h4 {
+            padding: 15px 20px;
+            margin: 0;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 16px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .log-content {
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.4;
+            border-left: 3px solid #28a745;
+            font-weight: 400;
+        }
+
+        .log-entry strong {
+            color: #495057;
+            font-weight: 500;
+        }
+
+        /* Адаптивные соединительные линии */
+        .round:not(:last-child) .match {
+            position: relative;
+        }
+
+        .round:not(:last-child) .match::after {
+            content: '';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            width: 30px;
+            height: 2px;
+            background-color: #6c757d;
+            transform: translateY(-50%);
+        }
+
+        /* Вертикальные соединители */
+        .round:not(:last-child) .match:nth-child(odd)::before {
+            content: '';
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            width: 2px;
+            height: calc(100% + 20px);
+            background-color: #6c757d;
+            transform: translateY(-25%);
+            z-index: -1;
+        }
+
+        /* Скрытие скроллбара но сохранение функциональности */
+        .log-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .log-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .log-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        .log-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
         }
     </style>
 </head>
 <body>
 <div class="tournament-container">
-    <div id="tournament-grid" class="tournament-grid">
+    <div id="tournament-bracket" class="tournament-bracket">
         <div class="no-participants">
             Добавьте участников для начала турнира
         </div>
@@ -196,28 +374,41 @@
 <div class="control-panel">
     <div class="tournament-info">
         <h3>Информация о турнире</h3>
-        <div>Участников: <span id="participant-count">0</span></div>
-        <div>Активных пар: <span id="active-pairs">0</span></div>
+        <div class="info-item">
+            <span class="info-label">Участников:</span>
+            <span class="info-value" id="participant-count">0</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Активных пар:</span>
+            <span class="info-value" id="active-pairs">0</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Разница сумм:</span>
+            <span class="info-value">≤20%</span>
+        </div>
     </div>
 
     <form id="add-participant-form">
         <div class="form-group">
             <label for="participant-name">Имя участника:</label>
-            <input type="text" id="participant-name" required>
+            <input type="text" id="participant-name" required placeholder="Введите имя">
         </div>
         <div class="form-group">
             <label for="participant-sum">Сумма:</label>
-            <input type="number" id="participant-sum" min="1" required>
+            <input type="number" id="participant-sum" min="1" required placeholder="Введите сумму">
         </div>
         <button type="submit" class="btn btn-primary">Добавить участника</button>
     </form>
 
     <button id="play-button" class="btn btn-success" disabled>Играть</button>
 
-    <div id="game-log"
-         style="max-height: 200px; overflow-y: auto; background: white; padding: 10px; border-radius: 4px; border: 1px solid #ddd;">
-        <h4>Лог игр:</h4>
-        <div id="log-content"></div>
+    <div class="game-log">
+        <h4>История игр</h4>
+        <div class="log-content" id="log-content">
+            <div style="text-align: center; color: #6c757d; padding: 20px; font-style: italic;">
+                История игр пуста
+            </div>
+        </div>
     </div>
 </div>
 
@@ -225,8 +416,9 @@
     class Tournament {
         constructor() {
             this.participants = [];
-            this.pairs = [];
+            this.rounds = [];
             this.gameLog = [];
+            this.DIFFERENCE_THRESHOLD = 0.2; // 20%
         }
 
         addParticipant(name, sum) {
@@ -241,49 +433,116 @@
         }
 
         rebuildTournament() {
-            // Получаем активных участников и сортируем по сумме
             const activeParticipants = this.participants.filter(p => p.active).sort((a, b) => a.sum - b.sum);
-            this.pairs = [];
 
             if (activeParticipants.length < 2) {
+                this.rounds = [];
                 return;
             }
 
-            const used = new Set();
-            const pairs = [];
+            this.rounds = [];
 
-            // Специальное правило: 2 минимальные суммы всегда играют друг против друга
-            if (activeParticipants.length >= 2) {
-                const min1 = activeParticipants[0];
-                const min2 = activeParticipants[1];
+            // Определяем количество раундов на основе количества участников
+            const totalParticipants = activeParticipants.length;
+            const maxRounds = Math.ceil(Math.log2(totalParticipants));
 
-                // Проверяем, не слишком ли большая разница (более 10%)
-                const diff = Math.abs(min1.sum - min2.sum) / Math.min(min1.sum, min2.sum);
-
-                pairs.push({
-                    participant1: min1,
-                    participant2: min2,
-                    level: 0
-                });
-                used.add(min1.id);
-                used.add(min2.id);
+            // Создаем структуру раундов
+            for (let i = 0; i < maxRounds; i++) {
+                this.rounds.push([]);
             }
 
-            // Формируем остальные пары
-            for (let i = 0; i < activeParticipants.length; i++) {
-                const participant = activeParticipants[i];
+            // Размещаем участников по раундам на основе их сумм
+            this.placeParticipantsBySum(activeParticipants);
+        }
+
+        placeParticipantsBySum(participants) {
+            // Сортируем участников по сумме (от меньшего к большему)
+            const sortedParticipants = [...participants].sort((a, b) => a.sum - b.sum);
+
+            // Определяем пороги для каждого раунда
+            const totalSum = sortedParticipants.reduce((sum, p) => sum + p.sum, 0);
+            const avgSum = totalSum / sortedParticipants.length;
+
+            // Группируем участников по уровням сумм
+            const groups = this.groupParticipantsBySum(sortedParticipants, avgSum);
+
+            // Размещаем группы по раундам
+            groups.forEach((group, groupIndex) => {
+                const roundIndex = Math.min(groupIndex, this.rounds.length - 1);
+                this.placeGroupInRound(group, roundIndex);
+            });
+
+            // Заполняем пустые слоты в последующих раундах
+            this.fillEmptySlots();
+        }
+
+        groupParticipantsBySum(participants, avgSum) {
+            const groups = [];
+            let currentGroup = [];
+
+            for (let i = 0; i < participants.length; i++) {
+                const participant = participants[i];
+
+                if (currentGroup.length === 0) {
+                    currentGroup.push(participant);
+                } else {
+                    // Проверяем, подходит ли участник к текущей группе (разница ≤20%)
+                    const canPair = currentGroup.some(p => {
+                        const diff = Math.abs(p.sum - participant.sum) / Math.min(p.sum, participant.sum);
+                        return diff <= this.DIFFERENCE_THRESHOLD;
+                    });
+
+                    if (canPair && currentGroup.length < 8) { // Ограничиваем размер группы
+                        currentGroup.push(participant);
+                    } else {
+                        // Начинаем новую группу
+                        if (currentGroup.length > 0) {
+                            groups.push([...currentGroup]);
+                        }
+                        currentGroup = [participant];
+                    }
+                }
+            }
+
+            if (currentGroup.length > 0) {
+                groups.push(currentGroup);
+            }
+
+            return groups;
+        }
+
+        placeGroupInRound(group, roundIndex) {
+            // Создаем пары внутри группы
+            const pairs = [];
+            const used = new Set();
+
+            // Специальное правило: если это первая группа (самые маленькие суммы),
+            // первые два участника всегда играют друг против друга
+            if (roundIndex === 0 && group.length >= 2) {
+                pairs.push({
+                    participant1: group[0],
+                    participant2: group[1],
+                    canPlay: true,
+                    roundIndex: roundIndex
+                });
+                used.add(group[0].id);
+                used.add(group[1].id);
+            }
+
+            // Создаем остальные пары в группе
+            for (let i = 0; i < group.length; i++) {
+                const participant = group[i];
                 if (used.has(participant.id)) continue;
 
                 let bestMatch = null;
                 let bestDiff = Infinity;
 
-                // Ищем лучшую пару в пределах 10%
-                for (let j = i + 1; j < activeParticipants.length; j++) {
-                    const candidate = activeParticipants[j];
+                for (let j = i + 1; j < group.length; j++) {
+                    const candidate = group[j];
                     if (used.has(candidate.id)) continue;
 
                     const diff = Math.abs(participant.sum - candidate.sum) / Math.min(participant.sum, candidate.sum);
-                    if (diff <= 0.1 && diff < bestDiff) {
+                    if (diff < bestDiff) {
                         bestMatch = candidate;
                         bestDiff = diff;
                     }
@@ -293,155 +552,243 @@
                     pairs.push({
                         participant1: participant,
                         participant2: bestMatch,
-                        level: Math.floor(pairs.length / 2) + 1
+                        canPlay: true,
+                        roundIndex: roundIndex
                     });
                     used.add(participant.id);
                     used.add(bestMatch.id);
                 } else {
-                    // Создаем пару с placeholder
-                    const lowerLevelSum = this.calculateLowerLevelSum(participant.sum);
-                    pairs.push({
-                        participant1: participant,
-                        participant2: {
-                            id: 'placeholder_' + Date.now(),
-                            name: '???',
-                            sum: lowerLevelSum,
-                            placeholder: true
-                        },
-                        level: Math.floor(pairs.length / 2) + 1
-                    });
-                    used.add(participant.id);
+                    // Участник проходит в следующий раунд автоматически
+                    if (roundIndex + 1 < this.rounds.length) {
+                        this.addByeToNextRound(participant, roundIndex + 1);
+                    }
                 }
             }
 
-            this.pairs = pairs;
+            // Добавляем пары в соответствующий раунд
+            this.rounds[roundIndex].push(...pairs);
         }
 
-        calculateLowerLevelSum(targetSum) {
-            // Примерная логика для расчета суммы placeholder
-            const activeSums = this.participants.filter(p => p.active).map(p => p.sum);
-            const avgSum = activeSums.reduce((a, b) => a + b, 0) / activeSums.length;
-            return Math.max(Math.floor(targetSum * 0.8), Math.floor(avgSum));
+        addByeToNextRound(participant, roundIndex) {
+            if (roundIndex >= this.rounds.length) return;
+
+            this.rounds[roundIndex].push({
+                participant1: participant,
+                participant2: {
+                    id: 'bye_' + Date.now() + '_' + Math.random(),
+                    name: 'BYE',
+                    sum: 0,
+                    bye: true
+                },
+                canPlay: false,
+                roundIndex: roundIndex
+            });
+        }
+
+        fillEmptySlots() {
+            // Заполняем пустые слоты для будущих победителей
+            for (let i = 1; i < this.rounds.length; i++) {
+                const prevRoundMatches = this.rounds[i - 1].length;
+                const currentRoundMatches = this.rounds[i].length;
+                const neededMatches = Math.ceil(prevRoundMatches / 2);
+
+                // Добавляем пустые слоты если нужно
+                for (let j = currentRoundMatches; j < neededMatches; j++) {
+                    this.rounds[i].push({
+                        participant1: null,
+                        participant2: null,
+                        canPlay: false,
+                        roundIndex: i
+                    });
+                }
+            }
         }
 
         playGame() {
-            if (this.pairs.length === 0) return;
+            if (this.rounds.length === 0) return;
 
-            // Выбираем случайную пару для игры
-            const availablePairs = this.pairs.filter(pair =>
-                !pair.participant2.placeholder &&
-                pair.participant1.active &&
-                pair.participant2.active
-            );
+            const availableMatches = [];
+            this.rounds.forEach((round, roundIndex) => {
+                round.forEach((match, matchIndex) => {
+                    if (match.canPlay && match.participant1 && match.participant2 &&
+                        !match.participant2.placeholder && !match.participant2.bye &&
+                        match.participant1.active && match.participant2.active) {
+                        availableMatches.push({ roundIndex, matchIndex, match });
+                    }
+                });
+            });
 
-            if (availablePairs.length === 0) return;
+            if (availableMatches.length === 0) return;
 
-            const randomPair = availablePairs[Math.floor(Math.random() * availablePairs.length)];
-            const { participant1, participant2 } = randomPair;
+            const randomMatch = availableMatches[Math.floor(Math.random() * availableMatches.length)];
+            const { roundIndex, matchIndex, match } = randomMatch;
+            const { participant1, participant2 } = match;
 
-            // Рассчитываем шансы на победу
             const totalSum = participant1.sum + participant2.sum;
             const chance1 = participant1.sum / totalSum;
 
-            // Определяем победителя
             const random = Math.random();
             const winner = random < chance1 ? participant1 : participant2;
             const loser = winner === participant1 ? participant2 : participant1;
 
-            // Обновляем суммы
             winner.sum += loser.sum;
             loser.active = false;
 
-            // Добавляем в лог
             this.gameLog.unshift({
                 winner: winner.name,
                 loser: loser.name,
                 winnerSum: winner.sum,
-                chance: Math.round((winner === participant1 ? chance1 : (1 - chance1)) * 100)
+                chance: Math.round((winner === participant1 ? chance1 : (1 - chance1)) * 100),
+                round: this.getRoundName(roundIndex)
             });
 
-            // Перестраиваем турнир
-            this.rebuildTournament();
+            // Продвигаем победителя в следующий раунд
+            if (roundIndex + 1 < this.rounds.length) {
+                const nextRoundMatchIndex = Math.floor(matchIndex / 2);
+                if (nextRoundMatchIndex < this.rounds[roundIndex + 1].length) {
+                    const nextMatch = this.rounds[roundIndex + 1][nextRoundMatchIndex];
+
+                    if (!nextMatch.participant1 || (nextMatch.participant1 && nextMatch.participant1.bye)) {
+                        nextMatch.participant1 = winner;
+                    } else if (!nextMatch.participant2 || (nextMatch.participant2 && nextMatch.participant2.bye)) {
+                        nextMatch.participant2 = winner;
+                    }
+
+                    if (nextMatch.participant1 && nextMatch.participant2 &&
+                        !nextMatch.participant1.bye && !nextMatch.participant2.bye) {
+                        nextMatch.canPlay = true;
+                    }
+                }
+            }
+
+            match.canPlay = false;
             this.updateDisplay();
             this.updateGameLog();
         }
 
+        getRoundName(roundIndex) {
+            const roundNames = ['1ST ROUND', 'ROUND OF 16', 'QUARTERFINALS', 'SEMIFINALS', 'FINALS'];
+            return roundNames[roundIndex] || `ROUND ${roundIndex + 1}`;
+        }
+
         updateDisplay() {
-            const grid = document.getElementById('tournament-grid');
+            const bracket = document.getElementById('tournament-bracket');
             const participantCount = document.getElementById('participant-count');
             const activePairs = document.getElementById('active-pairs');
 
             participantCount.textContent = this.participants.filter(p => p.active).length;
-            activePairs.textContent = this.pairs.filter(p => !p.participant2.placeholder).length;
 
-            if (this.pairs.length === 0) {
-                grid.innerHTML = '<div class="no-participants">Добавьте участников для начала турнира</div>';
+            let activePairsCount = 0;
+            this.rounds.forEach(round => {
+                round.forEach(match => {
+                    if (match.canPlay && match.participant1 && match.participant2 &&
+                        !match.participant2.placeholder && !match.participant2.bye) {
+                        activePairsCount++;
+                    }
+                });
+            });
+            activePairs.textContent = activePairsCount;
+
+            if (this.rounds.length === 0) {
+                bracket.innerHTML = '<div class="no-participants">Добавьте участников для начала турнира</div>';
                 document.getElementById('play-button').disabled = true;
                 return;
             }
 
-            // Группируем пары по уровням
-            const levels = {};
-            this.pairs.forEach(pair => {
-                if (!levels[pair.level]) levels[pair.level] = [];
-                levels[pair.level].push(pair);
-            });
-
             let html = '';
-            Object.keys(levels).sort((a, b) => parseInt(b) - parseInt(a)).forEach(level => {
-                html += `<div class="tournament-level">`;
-                html += `<div class="level-title">Уровень ${level}</div>`;
+            this.rounds.forEach((round, roundIndex) => {
+                const roundName = this.getRoundName(roundIndex);
 
-                levels[level].forEach(pair => {
-                    const totalSum = pair.participant1.sum + pair.participant2.sum;
-                    const chance1 = Math.round((pair.participant1.sum / totalSum) * 100);
-                    const chance2 = 100 - chance1;
+                html += `<div class="round">`;
+                html += `<div class="round-title">${roundName}</div>`;
+                html += `<div class="matches-container">`;
 
-                    html += `<div class="match-pair">`;
+                round.forEach(match => {
+                    html += `<div class="match">`;
 
                     // Участник 1
-                    html += `<div class="participant ${!pair.participant1.active ? 'loser' : ''}">`;
-                    html += `<div class="participant-name">${pair.participant1.name}</div>`;
-                    html += `<div class="participant-sum">Сумма: ${pair.participant1.sum}</div>`;
-                    if (!pair.participant2.placeholder) {
-                        html += `<div class="participant-chance">Шанс: ${chance1}%</div>`;
+                    if (match.participant1) {
+                        const totalSum = match.participant2 && !match.participant2.bye ?
+                            match.participant1.sum + match.participant2.sum : match.participant1.sum;
+                        const chance1 = match.participant2 && !match.participant2.placeholder && !match.participant2.bye ?
+                            Math.round((match.participant1.sum / totalSum) * 100) : 100;
+
+                        html += `<div class="participant ${!match.participant1.active ? 'loser' : ''}">`;
+                        html += `<div class="participant-left">`;
+                        html += `<div class="participant-name">${match.participant1.name}</div>`;
+                        html += `<div class="participant-sum">${match.participant1.sum}</div>`;
+                        html += `</div>`;
+                        if (match.participant2 && !match.participant2.placeholder && !match.participant2.bye) {
+                            html += `<div class="participant-chance">${chance1}%</div>`;
+                        }
+                        html += `</div>`;
+                    } else {
+                        html += `<div class="participant placeholder">`;
+                        html += `<div class="participant-left">`;
+                        html += `<div class="participant-name">TBD</div>`;
+                        html += `</div>`;
+                        html += `</div>`;
                     }
-                    html += `</div>`;
 
                     // Участник 2
-                    html += `<div class="participant ${pair.participant2.placeholder ? 'placeholder' : (!pair.participant2.active ? 'loser' : '')}">`;
-                    html += `<div class="participant-name">${pair.participant2.name}</div>`;
-                    html += `<div class="participant-sum">Сумма: ${pair.participant2.sum}</div>`;
-                    if (!pair.participant2.placeholder) {
-                        html += `<div class="participant-chance">Шанс: ${chance2}%</div>`;
+                    if (match.participant2) {
+                        let participantClass = 'participant';
+                        if (match.participant2.placeholder) participantClass += ' placeholder';
+                        else if (match.participant2.bye) participantClass += ' bye';
+                        else if (!match.participant2.active) participantClass += ' loser';
+
+                        const totalSum = match.participant1 && !match.participant2.bye ?
+                            match.participant1.sum + match.participant2.sum : match.participant2.sum;
+                        const chance2 = match.participant1 && !match.participant2.placeholder && !match.participant2.bye ?
+                            Math.round((match.participant2.sum / totalSum) * 100) : 0;
+
+                        html += `<div class="${participantClass}">`;
+                        html += `<div class="participant-left">`;
+                        html += `<div class="participant-name">${match.participant2.name}</div>`;
+                        if (!match.participant2.bye) {
+                            html += `<div class="participant-sum">${match.participant2.sum}</div>`;
+                        }
+                        html += `</div>`;
+                        if (match.participant2.bye) {
+                            html += `<div class="bye-indicator">AUTO</div>`;
+                        } else if (!match.participant2.placeholder && match.participant1) {
+                            html += `<div class="participant-chance">${chance2}%</div>`;
+                        }
+                        html += `</div>`;
+                    } else {
+                        html += `<div class="participant placeholder">`;
+                        html += `<div class="participant-left">`;
+                        html += `<div class="participant-name">TBD</div>`;
+                        html += `</div>`;
+                        html += `</div>`;
                     }
-                    html += `</div>`;
 
                     html += `</div>`;
                 });
 
                 html += `</div>`;
+                html += `</div>`;
             });
 
-            grid.innerHTML = html;
-
-            // Обновляем состояние кнопки "Играть"
-            const canPlay = this.pairs.some(pair =>
-                !pair.participant2.placeholder &&
-                pair.participant1.active &&
-                pair.participant2.active
-            );
-            document.getElementById('play-button').disabled = !canPlay;
+            bracket.innerHTML = html;
+            document.getElementById('play-button').disabled = activePairsCount === 0;
         }
 
         updateGameLog() {
             const logContent = document.getElementById('log-content');
-            const recentGames = this.gameLog.slice(0, 10);
+            const recentGames = this.gameLog.slice(0, 15);
+
+            if (recentGames.length === 0) {
+                logContent.innerHTML = `<div style="text-align: center; color: #6c757d; padding: 20px; font-style: italic;">
+                    История игр пуста
+                </div>`;
+                return;
+            }
 
             logContent.innerHTML = recentGames.map(game =>
-                `<div style="margin-bottom: 5px; padding: 5px; background: #f8f9fa; border-radius: 3px;">
-                    <strong>${game.winner}</strong> победил <strong>${game.loser}</strong>
-                    (${game.chance}% шанс, сумма: ${game.winnerSum})
+                `<div class="log-entry">
+                    <strong>${game.winner}</strong> победил <strong>${game.loser}</strong> в ${game.round}
+                    <br><small>${game.chance}% шанс • Итоговая сумма: ${game.winnerSum}</small>
                 </div>`
             ).join('');
         }
